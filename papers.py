@@ -23,29 +23,25 @@ def decide(input_file, watchlist_file, countries_file):
     :return: List of strings. Possible values of strings are: "Accept", "Reject", "Secondary", and "Quarantine"
 
     """
-    with open(countries_file, "r") as file_reader:
-        country_contents = file_reader.read()
-        country_contents = json.loads(country_contents)
-
-    with open(watchlist_file, "r") as file_reader:
-        watch_contents = file_reader.read()
-        watch_contents = json.loads(watch_contents)
-    with open(input_file,"r") as file_reader:
-        entries_contents = file_reader.read()
-        entries_contents = json.loads(entries_contents)
-
+    try:
+        with open(input_file, "r") as file_reader:
+            entries_contents = file_reader.read()
+            entries_contents = json.loads(entries_contents)
+        with open(watchlist_file, "r") as file_reader:
+            watch_contents = file_reader.read()
+            watch_contents = json.loads(watch_contents)
+        with open(countries_file, "r") as file_reader:
+            country_contents = file_reader.read()
+            country_contents = json.loads(country_contents)
         for cont in country_contents:
             for item in entries_contents:
-     #check for quarantine
+    #check for quarantine
                 if country_contents[cont]['medical_advisory'] != "":
-
                     if cont == item['from']['country']:
-
-                        return ("Quarantine")
-
+                        return ["Quarantine"]
                     elif 'via' in item.keys():
                         if cont == item['via']['country']:
-                            return ("Quarantine")
+                            return ["Quarantine"]
     #check for visitor visa
         for cont in country_contents:
             if country_contents[cont]['visitor_visa_required'] == '1':
@@ -53,43 +49,45 @@ def decide(input_file, watchlist_file, countries_file):
                     if item['entry_reason'] == "visit":
                         if cont == item['from']['country']:
                             if 'visa' in item.keys():
-                                visit_visa_date = datetime.strptime(item['visa']['date'], "%Y-%m-%d")
+                                visit_visa_date = datetime.datetime.strptime(item['visa']['date'], "%Y-%m-%d")
                                 visit_visa_year = visit_visa_date.year
                                 if visit_visa_year > 2012:
-                                    return ("Accept")
+                                    return ["Accept"]
                             else:
-                                return ("Reject")
-
-
-     #check for transit visa
+                                return ["Reject"]
+    #check for transit visa
         for cont in country_contents:
             if country_contents[cont]['transit_visa_required'] == '1':
                 for item in entries_contents:
                     if item['entry_reason'] == "transit":
                         if cont == item['from']['country']:
                             if 'visa' in item.keys():
-                                transit_visa_date = datetime.strptime(item['visa']['date'], "%Y-%m-%d")
+                                transit_visa_date = datetime.datetime.strptime(item['visa']['date'], "%Y-%m-%d")
                                 transit_visa_year = transit_visa_date.year
                                 if transit_visa_year > 2012:
-                                    return ("Accept")
+                                    return ["Accept"]
                             else:
-                                return ("Reject")
-
-
+                                return ["Reject"]
     #check watchlist
         for item in entries_contents:
             for watch in watch_contents:
                 if item['first_name'] == watch['first_name']:
-                    return ("Secondary")
+                    return ["Secondary"]
                 elif item['last_name'] == watch['last_name']:
-                    return ("Secondary")
+                    return ["Secondary"]
                 elif item['passport'] == watch['passport']:
-                    return ("Secondary")
+                    return ["Secondary"]
     #Returning home
+        temp_returning_list = []
         for item in entries_contents:
             if item['home']['country'] == 'KAN':
                 if item['from']['country'] not in ('ELE', 'LUG'):
-                    return ("Accept")
+                    temp_result = "Accept"
+                    temp_returning_list.append(temp_result)
+        return temp_returning_list
+    except:
+        raise FileNotFoundError
+
 
 
 
@@ -123,3 +121,4 @@ def valid_date_format(date_string):
         return True
     except ValueError:
         return False
+
