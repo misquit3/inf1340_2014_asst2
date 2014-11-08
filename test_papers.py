@@ -19,9 +19,10 @@ from papers import decide
 
 def test_basic():
 
-    assert decide("test_returning_citizen.json", "watchlist.json","countries.json") == ["Accept", "Accept"]
+  #  assert decide("test_returning_citizen.json", "watchlist.json","countries.json") == ["Accept", "Accept"]
  #   assert decide(r"C:\Users\Nathan\PycharmProjects\inf1340_2014_asst2\test_watchlist.json",r"C:\Users\Nathan\PycharmProjects\inf1340_2014_asst2\watchlist.json",r"C:\Users\Nathan\PycharmProjects\inf1340_2014_asst2\countries.json") == ["Secondary"]
   #  assert decide(r"C:\Users\Nathan\PycharmProjects\inf1340_2014_asst2\test_quarantine.json", r"C:\Users\Nathan\PycharmProjects\inf1340_2014_asst2\watchlist.json",r"C:\Users\Nathan\PycharmProjects\inf1340_2014_asst2\countries.json") == ["Quarantine"]
+
 '''
 def test_files():
     with pytest.raises(FileNotFoundError):

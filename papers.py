@@ -11,6 +11,36 @@ import re
 import datetime
 import json
 
+def valid_passport_format(passport_number):
+    """
+    Checks whether a pasport number is five sets of five alpha-number characters separated by dashes
+    :param passport_number: alpha-numeric string
+    :return: Boolean; True if the format is valid, False otherwise
+    """
+    passport_format = re.compile('.{5}-.{5}-.{5}-.{5}-.{5}')
+    if passport_format.match(passport_number):
+        return True
+    else:
+        return False
+
+def valid_date_format(date_string):
+    """
+    Checks whether a date has the format YYYY-mm-dd in numbers
+    :param date_string: date to be checked
+    :return: Boolean True if the format is valid, False otherwise
+    """
+    try:
+        datetime.datetime.strptime(date_string, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
+
+def mandatory_entries(item, key_list):
+    if all(key_list in item for key_list in ['passport','first_name','last_name','entry_reason','from']):
+        return True
+    else:
+        return False
+
 
 def decide(input_file, watchlist_file, countries_file):
     """
@@ -33,9 +63,26 @@ def decide(input_file, watchlist_file, countries_file):
         with open(countries_file, "r") as file_reader:
             country_contents = file_reader.read()
             country_contents = json.loads(country_contents)
+#check valid data entries
+        for item in entries_contents:
+    #Check passport format
+            passport_number = item['passport']
+            if not valid_passport_format(passport_number):
+                return["Reject"]
+    #Check date format
+            date_string= item['birth_date']
+            valid_date_format(date_string)
+            if not valid_date_format(date_string):
+                return ["Reject"]
+    #Check mandatory entries
+            key_list=item.keys()
+            if not mandatory_entries(item,key_list):
+                return ["Reject"]
+
+
+#check for quarantine
         for cont in country_contents:
             for item in entries_contents:
-    #check for quarantine
                 if country_contents[cont]['medical_advisory'] != "":
                     if cont == item['from']['country']:
                         return ["Quarantine"]
@@ -94,31 +141,4 @@ def decide(input_file, watchlist_file, countries_file):
 
     
 
-
-def valid_passport_format(passport_number):
-    """
-    Checks whether a pasport number is five sets of five alpha-number characters separated by dashes
-    :param passport_number: alpha-numeric string
-    :return: Boolean; True if the format is valid, False otherwise
-    """
-    passport_format = re.compile('.{5}-.{5}-.{5}-.{5}-.{5}')
-
-    if passport_format.match(passport_number):
-        return True
-    else:
-        return False
-
-
-def valid_date_format(date_string):
-    """
-    Checks whether a date has the format YYYY-mm-dd in numbers
-    :param date_string: date to be checked
-    :return: Boolean True if the format is valid, False otherwise
-    """
-
-    try:
-        datetime.datetime.strptime(date_string, '%Y-%m-%d')
-        return True
-    except ValueError:
-        return False
 
