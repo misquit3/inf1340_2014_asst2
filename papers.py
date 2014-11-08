@@ -2,11 +2,9 @@
 
 """ Computer-based immigration office for Kanadia """
 
-__author__ = 'Susan Sim'
-__email__ = "ses@drsusansim.org"
+__author__ = 'Tania_Misquitta and Vidhya_Arulnathan
+__assignment__ = "inf1340_2014_asst2"
 
-__copyright__ = "2014 Susan Sim"
-__license__ = "MIT License"
 
 __status__ = "Prototype"
 
@@ -49,6 +47,7 @@ def valid_date_format(date_string):
     :param date_string: date to be checked
     :return: Boolean True if the format is valid, False otherwise
     """
+
     try:
         datetime.datetime.strptime(date_string, '%Y-%m-%d')
         return True
