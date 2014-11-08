@@ -2,10 +2,8 @@
 
 """ Computer-based immigration office for Kanadia """
 
-__author__ = 'Tania_Misquitta and Vidhya_Arulnathan
+__author__ = 'Tania_Misquitta and Vidhya_Arulnathan'
 __assignment__ = "inf1340_2014_asst2"
-
-
 __status__ = "Prototype"
 
 # imports one per line
