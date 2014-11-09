@@ -18,7 +18,7 @@ import json
 
 def valid_passport_format(passport_number):
     """
-    Checks whether a pasport number is five sets of five alpha-number characters separated by dashes
+    Checks whether a passport number is five sets of five alpha-number characters separated by dashes
     :param passport_number: alpha-numeric string
     :return: Boolean; True if the format is valid, False otherwise
     """
@@ -31,7 +31,7 @@ def valid_passport_format(passport_number):
 
 def valid_date_format(date_string):
     """
-    Checks whether a date has the format YYYY-mm-dd in numbers
+    Checks whether a date has the format 'yyyy-mm-dd' in numbers
     :param date_string: date to be checked
     :return: Boolean True if the format is valid, False otherwise
     """
@@ -42,11 +42,16 @@ def valid_date_format(date_string):
         return False
 
 def mandatory_entries(item, key_list):
-    if all(key_list in item for key_list in ['passport','first_name','last_name','entry_reason','from']):
+    """
+    Checks if mandatory keys in dictionary exist
+    :param item:each entry in input file
+           key_list: list of all keys in item
+    :return: Boolean; True if mandatory keys exist, False otherwise
+    """
+    if all(key_list in item for key_list in ['passport', 'first_name', 'last_name', 'entry_reason', 'from']):
         return True
     else:
         return False
-
 
 def decide(input_file, watchlist_file, countries_file):
     """
@@ -69,13 +74,15 @@ def decide(input_file, watchlist_file, countries_file):
         with open(countries_file, "r") as file_reader:
             country_contents = file_reader.read()
             country_contents = json.loads(country_contents)
-#check valid data entries
 
+#check valid data entries
         for item in entries_contents:
-    #Check passport format
+
+#Check passport format
             passport_number = item['passport']
             date_string= item['birth_date']
             key_list=item.keys()
+
     #check passport format
             if not valid_passport_format(passport_number):
                 return ["Reject"]
@@ -88,7 +95,6 @@ def decide(input_file, watchlist_file, countries_file):
             elif not mandatory_entries(item,key_list):
                 return ["Reject"]
 
-
 #check for quarantine
         for cont in country_contents:
             for item in entries_contents:
@@ -98,7 +104,7 @@ def decide(input_file, watchlist_file, countries_file):
                     elif 'via' in item.keys():
                         if cont == item['via']['country']:
                             return ["Quarantine"]
-    #check for visitor visa
+#check for visitor visa
 
         for cont in country_contents:
             if country_contents[cont]['visitor_visa_required'] == '1':
@@ -112,7 +118,7 @@ def decide(input_file, watchlist_file, countries_file):
                                     return ["Accept"]
                             else:
                                 return ["Reject"]
-    #check for transit visa
+#check for transit visa
 
         for cont in country_contents:
             if country_contents[cont]['transit_visa_required'] == '1':
@@ -127,10 +133,7 @@ def decide(input_file, watchlist_file, countries_file):
                             else:
                                 return ["Reject"]
 
-
-
-
-    #check watchlist
+#check watchlist
         for item in entries_contents:
             for watch in watch_contents:
                 if item['first_name'] == watch['first_name']:
@@ -139,7 +142,8 @@ def decide(input_file, watchlist_file, countries_file):
                     return ["Secondary"]
                 elif item['passport'] == watch['passport']:
                     return ["Secondary"]
-    #Returning home
+
+#Returning home
         temp_returning_list = []
         for item in entries_contents:
             if item['home']['country'] == 'KAN':
