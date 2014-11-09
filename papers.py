@@ -16,6 +16,7 @@ import re
 import datetime
 import json
 
+
 def valid_passport_format(passport_number):
     """
     Checks whether a passport number is five sets of five alpha-number characters separated by dashes
@@ -29,6 +30,7 @@ def valid_passport_format(passport_number):
     else:
         return False
 
+
 def valid_date_format(date_string):
     """
     Checks whether a date has the format 'yyyy-mm-dd' in numbers
@@ -41,6 +43,7 @@ def valid_date_format(date_string):
     except ValueError:
         return False
 
+
 def mandatory_entries(item, key_list):
     """
     Checks if mandatory keys in dictionary exist
@@ -52,6 +55,7 @@ def mandatory_entries(item, key_list):
         return True
     else:
         return False
+
 
 def decide(input_file, watchlist_file, countries_file):
     """
@@ -77,22 +81,17 @@ def decide(input_file, watchlist_file, countries_file):
 
 #check valid data entries
         for item in entries_contents:
-
-#Check passport format
             passport_number = item['passport']
-            date_string= item['birth_date']
-            key_list=item.keys()
-
-    #check passport format
+            date_string = item['birth_date']
+            key_list = item.keys()
+#check passport format
             if not valid_passport_format(passport_number):
                 return ["Reject"]
-
-    #check date format
+#check date format
             elif not valid_date_format(date_string):
                 return ["Reject"]
-
-    #Check mandatory entries
-            elif not mandatory_entries(item,key_list):
+#check mandatory entries
+            elif not mandatory_entries(item, key_list):
                 return ["Reject"]
 
 #check for quarantine
@@ -143,7 +142,7 @@ def decide(input_file, watchlist_file, countries_file):
                 elif item['passport'] == watch['passport']:
                     return ["Secondary"]
 
-#Returning home
+#check for Kanadians returning home
         temp_returning_list = []
         for item in entries_contents:
             if item['home']['country'] == 'KAN':
@@ -153,10 +152,3 @@ def decide(input_file, watchlist_file, countries_file):
         return temp_returning_list
     except:
         raise FileNotFoundError
-
-
-
-
-    
-
-
