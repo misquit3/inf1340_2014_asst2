@@ -31,8 +31,8 @@ def test_files():
 
 
 def test_date_format():
-    assert valid_date_format("Nov 4") == 'False'
-    assert valid_date_format("2012-10-09") == 'True'
+    assert valid_date_format("Nov 4") == False
+    assert valid_date_format("2012-10-09") == True
 
 
 def test_passport():
