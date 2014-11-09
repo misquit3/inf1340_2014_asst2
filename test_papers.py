@@ -25,19 +25,19 @@ def test_basic():
     assert decide(r"C:\Users\Nathan\PycharmProjects\inf1340_2014_asst2\test_reject.json", r"C:\Users\Nathan\PycharmProjects\inf1340_2014_asst2\watchlist.json",r"C:\Users\Nathan\PycharmProjects\inf1340_2014_asst2\countries.json") == ["Reject"]
 
 
-
 def test_files():
     with pytest.raises(FileNotFoundError):
         decide("test_returning_citizen.json", "", "countries.json")
 
 
 def test_date_format():
-    assert valid_date_format("Nov 4") == False
-    assert valid_date_format("2012-10-09") == True
+    assert valid_date_format("Nov 4") == 'False'
+    assert valid_date_format("2012-10-09") == 'True'
+
 
 def test_passport():
-    assert valid_passport_format("S3Q1-5ABCD-8EFGH-9XYZ1-TH60U") == False
-    assert valid_passport_format("hs2ir-YR34H-jdkt9-THY78-absc4") == True
+    assert valid_passport_format("S3Q1-5ABCD-8EFGH-9XYZ1-TH60U") == 'False'
+    assert valid_passport_format("hs2ir-YR34H-jdkt9-THY78-absc4") == 'True'
 
 
 
