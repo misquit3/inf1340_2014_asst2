@@ -2,9 +2,14 @@
 
 """ Computer-based immigration office for Kanadia """
 
-__author__ = 'Tania_Misquitta and Vidhya_Arulnathan'
-__assignment__ = "inf1340_2014_asst2"
+__author__ = "Tania_Misquitta and Vidhya_Arulnathan"
+__email__ = "tania.misquitta@mail.utoronto.ca / vidhya.arulnathan@mail.utotonto.ca"
+
+__copyright__ = "2014 Tania Vidhya"
+__license__ = "Tania Vidhya License"
+
 __status__ = "Prototype"
+
 
 # imports one per line
 import re
@@ -17,6 +22,7 @@ def valid_passport_format(passport_number):
     :param passport_number: alpha-numeric string
     :return: Boolean; True if the format is valid, False otherwise
     """
+
     passport_format = re.compile('.{5}-.{5}-.{5}-.{5}-.{5}')
     if passport_format.match(passport_number):
         return True
@@ -64,19 +70,22 @@ def decide(input_file, watchlist_file, countries_file):
             country_contents = file_reader.read()
             country_contents = json.loads(country_contents)
 #check valid data entries
+
         for item in entries_contents:
     #Check passport format
             passport_number = item['passport']
-            if not valid_passport_format(passport_number):
-                return["Reject"]
-    #Check date format
             date_string= item['birth_date']
-            valid_date_format(date_string)
-            if not valid_date_format(date_string):
-                return ["Reject"]
-    #Check mandatory entries
             key_list=item.keys()
-            if not mandatory_entries(item,key_list):
+    #check passport format
+            if not valid_passport_format(passport_number):
+                return ["Reject"]
+
+    #check date format
+            elif not valid_date_format(date_string):
+                return ["Reject"]
+
+    #Check mandatory entries
+            elif not mandatory_entries(item,key_list):
                 return ["Reject"]
 
 
@@ -90,6 +99,7 @@ def decide(input_file, watchlist_file, countries_file):
                         if cont == item['via']['country']:
                             return ["Quarantine"]
     #check for visitor visa
+
         for cont in country_contents:
             if country_contents[cont]['visitor_visa_required'] == '1':
                 for item in entries_contents:
@@ -103,6 +113,7 @@ def decide(input_file, watchlist_file, countries_file):
                             else:
                                 return ["Reject"]
     #check for transit visa
+
         for cont in country_contents:
             if country_contents[cont]['transit_visa_required'] == '1':
                 for item in entries_contents:
@@ -115,6 +126,10 @@ def decide(input_file, watchlist_file, countries_file):
                                     return ["Accept"]
                             else:
                                 return ["Reject"]
+
+
+
+
     #check watchlist
         for item in entries_contents:
             for watch in watch_contents:
@@ -134,7 +149,6 @@ def decide(input_file, watchlist_file, countries_file):
         return temp_returning_list
     except:
         raise FileNotFoundError
-
 
 
 
