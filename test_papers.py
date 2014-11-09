@@ -14,7 +14,7 @@ __status__ = "Prototype"
 import pytest
 import py
 import re
-from papers import decide,valid_date_format,valid_passport_format
+from papers import decide, valid_date_format, valid_passport_format
 
 
 def test_basic():
@@ -36,8 +36,8 @@ def test_date_format():
 
 
 def test_passport():
-    assert valid_passport_format("S3Q1-5ABCD-8EFGH-9XYZ1-TH60U") == 'False'
-    assert valid_passport_format("hs2ir-YR34H-jdkt9-THY78-absc4") == 'True'
+    assert valid_passport_format("S3Q1-5ABCD-8EFGH-9XYZ1-TH60U") == False
+    assert valid_passport_format("hs2ir-YR34H-jdkt9-THY78-absc4") == True
 
 
 
